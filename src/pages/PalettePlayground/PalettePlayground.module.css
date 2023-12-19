@@ -1,0 +1,9 @@
+.container {
+  display: grid;
+  grid-template-columns: 0.2fr 3fr;
+  height: 100vh;
+}
+
+.drawingBoard {
+  padding: 1rem;
+}
