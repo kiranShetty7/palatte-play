@@ -1,66 +1,85 @@
-import { useEffect, useRef, useState } from "react"
-
+import React, { useEffect, useRef, useState } from "react";
 
 const DrawingBoard = () => {
-    const drawingBoardRef = useRef(null)
-    const contextRef = useRef(null)
-    const [isDrawing, setIsDrawing] = useState(false)
-    // const [color, setColor] = useState('black')
-
+    const drawingBoardRef = useRef(null);
+    const contextRef = useRef(null);
+    const [isDrawing, setIsDrawing] = useState(false);
 
     useEffect(() => {
-        const drawingBoard = drawingBoardRef.current
-        // const pixelRatio = window.pixelRatio + 0.4xqsx
-        drawingBoard.height = window.innerHeight * 1.80
-        drawingBoard.width = window.innerWidth * 1.80
-        // drawingBoard.style.width = `${window.innerWidth}px`;
-        // drawingBoard.style.height = `${window.innerHeight}px`;
+        const drawingBoard = drawingBoardRef.current;
+        const parentDiv = drawingBoard.parentElement;
 
-        const context = drawingBoard.getContext('2d')
-        context.scale(2, 2)
-        context.lineCap = "round"
-        context.strokeStyle = 'black'
-        context.lineWidth = 4
-        contextRef.current = context
-    }, [])
+        const resizeCanvas = () => {
+            const { clientWidth, clientHeight } = parentDiv;
+            drawingBoard.width = clientWidth;
+            drawingBoard.height = clientHeight;
 
+            const context = drawingBoard.getContext("2d");
+            context.lineCap = "round";
+            context.strokeStyle = "black";
+            context.lineWidth = 4;
+            contextRef.current = context;
+        };
+
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        return () => {
+            window.removeEventListener("resize", resizeCanvas);
+        };
+    }, []);
+
+
+
+    const scaleCoordinates = (e) => {
+        const { pageX, pageY } = e.touches ? e.touches[0] : e;
+        const rect = drawingBoardRef.current.getBoundingClientRect();
+        const correctionFactorX = 5; // Adjust this value as needed
+        const correctionFactorY = 5; // Adjust this value as needed
+        return {
+            x: pageX - window.scrollX - rect.left + correctionFactorX,
+            y: pageY - window.scrollY - rect.top + correctionFactorY,
+        };
+    };
 
 
     const startDrawing = (e) => {
+        const { x, y } = scaleCoordinates(e);
 
-        const { offsetX, offsetY } = e.nativeEvent
-        contextRef.current.beginPath()
-        contextRef.current.moveTo(offsetX, offsetY)
-        setIsDrawing(true)
-    }
+        contextRef.current.beginPath();
+        contextRef.current.moveTo(x, y);
+        setIsDrawing(true);
+    };
 
     const stopDrawing = () => {
-        contextRef.current.closePath()
-        setIsDrawing(false)
-    }
+        contextRef.current.closePath();
+        setIsDrawing(false);
+    };
 
     const draw = (e) => {
         if (!isDrawing) {
-            return
+            return;
         }
-        const { offsetX, offsetY } = e.nativeEvent
-        contextRef.current.lineTo(offsetX, offsetY)
-        contextRef.current.stroke()
 
-    }
+        const { x, y } = scaleCoordinates(e);
+        contextRef.current.lineTo(x, y);
+        contextRef.current.stroke();
+    };
 
     return (
-        <canvas
-            onMouseDown={startDrawing}
-            onMouseUp={stopDrawing}
-            onMouseMove={draw}
-            onTouchStart={startDrawing}
-            onTouchEnd={stopDrawing}
-            onTouchMove={draw}
-            ref={drawingBoardRef}
-            style={{ height: '100%', width: '100%', backgroundColor: 'beige' }}
-        />
-    )
-}
+        <div style={{ height: "100%" }}>
+            <canvas
+                onMouseDown={startDrawing}
+                onMouseUp={stopDrawing}
+                onMouseMove={draw}
+                onTouchStart={startDrawing}
+                onTouchEnd={stopDrawing}
+                onTouchMove={draw}
+                ref={drawingBoardRef}
+                style={{ height: "100%", width: "100%", backgroundColor: "beige" }}
+            />
+        </div>
+    );
+};
 
-export default DrawingBoard
+export default DrawingBoard;

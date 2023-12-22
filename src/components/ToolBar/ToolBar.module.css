@@ -1,18 +1,22 @@
 .container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.icons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.icon {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-.name{
-    text-align:center;
+.name {
+  text-align: center !important;
 }
