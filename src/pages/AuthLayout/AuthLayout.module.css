@@ -1,0 +1,46 @@
+.background {
+  background-image: url("../../assets/backgroundColour.png");
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  gap: 1rem;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.content {
+  padding-top: 10rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif !important;
+  color: #fff;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.subTitle {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif !important;
+  color: #fff;
+  font-size: 1.75rem;
+  text-align: center;
+  font-style: italic;
+}
+
+.card {
+  width: 20rem;
+  margin-top: 2rem;
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}

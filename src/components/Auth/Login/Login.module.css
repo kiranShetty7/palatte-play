@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.emailInput {
+  width: 100%;
+  color: #fff;
+}
+
+.passwordInput {
+  margin: 1rem;
+  width: 100%;
+  color: #fff;
+}
+
+.submit {
+  width: 100% !important;
+  text-transform: initial;
+  background-color: #7584f4;
+}
