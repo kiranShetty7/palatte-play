@@ -10,13 +10,23 @@
   overflow-y: auto;
 }
 
+.background {
+  background-color: lavender;
+}
+
 .icon {
   display: flex;
+  padding: 5px;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
+  border-radius: 90px;
 }
 
+.icon:hover {
+  background-color: lavender;
+}
 .name {
   text-align: center !important;
 }

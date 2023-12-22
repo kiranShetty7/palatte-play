@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 
 const DrawingBoard = () => {
     const drawingBoardRef = useRef(null);
     const contextRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
-
+    const [backgroundColor, setBackgroundColor] = useState('#fff')
+    const store = useSelector((state) => state)
+    const toolBarState = store.toolbar
+    console.log(toolBarState.b)
     useEffect(() => {
         const drawingBoard = drawingBoardRef.current;
         const parentDiv = drawingBoard.parentElement;
@@ -28,6 +32,22 @@ const DrawingBoard = () => {
             window.removeEventListener("resize", resizeCanvas);
         };
     }, []);
+
+    useEffect(() => {
+        const drawingBoard = drawingBoardRef.current;
+        console.log("cakjcka")
+        const configureColour = () => {
+            const context = drawingBoard.getContext("2d");
+            context.lineCap = "round";
+            context.strokeStyle = toolBarState.tool === 'Eraser' ? backgroundColor : toolBarState.penColour;
+            context.lineWidth = toolBarState.brushSize / 10;
+            contextRef.current = context;
+            setBackgroundColor(toolBarState.backgroundColour)
+        };
+
+        configureColour()
+
+    }, [toolBarState.penColour, toolBarState.brushSize, toolBarState.backgroundColour, toolBarState.tool]);
 
 
 
@@ -67,7 +87,7 @@ const DrawingBoard = () => {
     };
 
     return (
-        <div style={{ height: "100%" }}>
+        <div style={{ height: "99.5%" }}>
             <canvas
                 onMouseDown={startDrawing}
                 onMouseUp={stopDrawing}
@@ -76,7 +96,7 @@ const DrawingBoard = () => {
                 onTouchEnd={stopDrawing}
                 onTouchMove={draw}
                 ref={drawingBoardRef}
-                style={{ height: "100%", width: "100%", backgroundColor: "beige" }}
+                style={{ height: "100%", width: "100%", backgroundColor: backgroundColor }}
             />
         </div>
     );

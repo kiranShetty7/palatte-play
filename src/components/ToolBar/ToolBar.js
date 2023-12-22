@@ -1,25 +1,46 @@
-import { useState } from "react"
-import Slider from '@mui/material/Slider';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateTool } from "../../store/ToolbarSlice";
 import IconSelector from "../IconSelector/IconSelector";
-import classes from './ToolBar.module.css'
+import classes from "./ToolBar.module.css";
 
 const ToolBar = () => {
-    const [size, setSize] = useState(30);
-    const toolBarArray = ['Draw', 'Fill', 'Eraser', 'Brush Size', 'Undo', 'Redo', 'Background colour', 'Change colour']
-    
-    const handleChange = (event, newValue) => {
-        setSize(newValue);
-    }
+    const toolBarArray = [
+        "Draw",
+        "Fill",
+        "Eraser",
+        "Brush Size",
+        "Undo",
+        "Redo",
+        "Background colour",
+        "Change colour",
+    ];
+    const [index, setIndex] = useState(null);
+    const dispatch = useDispatch();
+
+    const handleClick = (e, tool, number) => {
+        setIndex(number);
+        if (tool !== "Brush Size")
+            dispatch(updateTool({ tool: tool }));
+    };
+
     return (
         <div className={classes.container}>
-            {toolBarArray.map((item) => (
-                <div className={classes.icon}>
-                    <IconSelector name={item} />
-                    <p className={classes.name}>{item}</p>
-                    {item === 'Brush Size' && <Slider step={10} aria-label="Brush Size" value={size} onChange={handleChange} />}
-                </div>
+            {toolBarArray.map((item, number) => (
+                <>
+                    <div
+                        className={`${classes.icon} ${index === number && classes.background
+                            }`}
+                        onClick={(e) => handleClick(e, item, number)}
+                    >
+                        <IconSelector name={item} />
+                        <p className={classes.name}>{item}</p>
+                    </div>
+                    {/* {item === 'Brush Size' && } */}
+                </>
             ))}
-        </div>)
-}
+        </div>
+    );
+};
 
-export default ToolBar
+export default ToolBar;

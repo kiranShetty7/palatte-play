@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  gap: 10px;
+  padding: 0.5rem;
+}
+
+.colour {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 4px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.selected {
+  border: 2px solid black !important;
+}
