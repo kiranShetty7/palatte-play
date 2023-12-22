@@ -4,7 +4,7 @@ const initialState = {
     tool: "Draw",
     backgroundColour: "#fff",
     penColour: "#000",
-    brushSize: 4
+    brushSize: 40
 };
 
 
@@ -31,7 +31,13 @@ const toolBarSlice = createSlice({
             console.log(action.payload)
             state.brushSize = action.payload.brushSize;
         },
+
+        updateBrushSize(state, action) {
+            console.log(action.payload)
+            state.brushSize = action.payload.brushSize;
+        },
     },
+
 });
 
 export const { updateTool, updateBackgroundColour, updatePenColour, updateBrushSize } = toolBarSlice.actions;

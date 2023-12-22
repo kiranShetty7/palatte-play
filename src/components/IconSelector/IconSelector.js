@@ -14,6 +14,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem'
 import { useDispatch } from 'react-redux';
 import { updateBrushSize } from "../../store/ToolbarSlice";
+import DownloadIcon from '@mui/icons-material/Download';
 
 const IconSelector = (props) => {
     const [size, setSize] = useState(30);
@@ -33,6 +34,8 @@ const IconSelector = (props) => {
             brushSize: newValue
         }))
     }
+
+
 
     const { name } = props
     if (name === 'Draw')
@@ -84,6 +87,9 @@ const IconSelector = (props) => {
                 <ColorPickerComponent type={name} handleClose={handleClose} />
             </Menu>
         </>
+
+    if (name === 'Download')
+        return (<DownloadIcon className={classes.icon} />)
 
 }
 

@@ -14,6 +14,7 @@ const ToolBar = () => {
         "Redo",
         "Background colour",
         "Change colour",
+        "Download"
     ];
     const [index, setIndex] = useState(null);
     const dispatch = useDispatch();

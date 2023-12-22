@@ -45,7 +45,36 @@ const DrawingBoard = () => {
             setBackgroundColor(toolBarState.backgroundColour)
         };
 
-        configureColour()
+        const handleDownload = () => {
+            const tempCanvas = document.createElement('canvas');
+            const tempContext = tempCanvas.getContext('2d');
+
+            // Set the dimensions of the temporary canvas
+            tempCanvas.width = drawingBoard.width;
+            tempCanvas.height = drawingBoard.height;
+
+            // Draw the background color on the temporary canvas
+            tempContext.fillStyle = backgroundColor;
+            tempContext.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+            // Draw the actual drawing on top of the background
+            tempContext.drawImage(drawingBoard, 0, 0);
+
+            // Create a data URI from the temporary canvas
+            const URL = tempCanvas.toDataURL();
+
+            // Create a download link
+            const anchor = document.createElement('a');
+            anchor.href = URL;
+            anchor.download = 'test.jpg';
+            anchor.click();
+        };
+
+
+        if (toolBarState.tool === 'Download')
+            handleDownload()
+        else
+            configureColour()
 
     }, [toolBarState.penColour, toolBarState.brushSize, toolBarState.backgroundColour, toolBarState.tool]);
 
