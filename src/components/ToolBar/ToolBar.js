@@ -7,7 +7,6 @@ import classes from "./ToolBar.module.css";
 const ToolBar = () => {
     const toolBarArray = [
         "Draw",
-        "Fill",
         "Eraser",
         "Brush Size",
         "Undo",

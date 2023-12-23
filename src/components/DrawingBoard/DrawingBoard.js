@@ -36,8 +36,9 @@ const DrawingBoard = () => {
     useEffect(() => {
         const drawingBoard = drawingBoardRef.current;
         console.log("cakjcka")
+        const context = drawingBoard.getContext("2d");
         const configureColour = () => {
-            const context = drawingBoard.getContext("2d");
+
             context.lineCap = "round";
             context.strokeStyle = toolBarState.tool === 'Eraser' ? backgroundColor : toolBarState.penColour;
             context.lineWidth = toolBarState.brushSize / 10;
@@ -70,9 +71,15 @@ const DrawingBoard = () => {
             anchor.click();
         };
 
+        const fillColour = () => {
+            context.fillStyle = 'red'; // Set the fill color
+            context.fillRect(0, 0, drawingBoard.width, drawingBoard.height); // Fill the entire canvas
+        }
 
         if (toolBarState.tool === 'Download')
             handleDownload()
+        else if (toolBarState.tool === 'Fill')
+            fillColour()
         else
             configureColour()
 
