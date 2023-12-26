@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import ToolBar from "../ToolBar/ToolBar";
+import classes from './DrawingBoard.module.css'
 
 const DrawingBoard = () => {
     const drawingBoardRef = useRef(null);
@@ -8,17 +10,21 @@ const DrawingBoard = () => {
     const [backgroundColor, setBackgroundColor] = useState('#fff')
     const store = useSelector((state) => state)
     const toolBarState = store.toolbar
-    console.log(toolBarState.b)
+    const imageArray = useRef([])
+    const pointer = useRef(0)
+
     useEffect(() => {
         const drawingBoard = drawingBoardRef.current;
         const parentDiv = drawingBoard.parentElement;
-
+        const context = drawingBoard.getContext("2d");
+        const imageData = context.getImageData(0, 0, drawingBoard.width, drawingBoard.height)
+        imageArray.current.push(imageData)
         const resizeCanvas = () => {
             const { clientWidth, clientHeight } = parentDiv;
             drawingBoard.width = clientWidth;
             drawingBoard.height = clientHeight;
 
-            const context = drawingBoard.getContext("2d");
+
             context.lineCap = "round";
             context.strokeStyle = "black";
             context.lineWidth = 4;
@@ -71,19 +77,23 @@ const DrawingBoard = () => {
             anchor.click();
         };
 
-        const fillColour = () => {
-            context.fillStyle = 'red'; // Set the fill color
-            context.fillRect(0, 0, drawingBoard.width, drawingBoard.height); // Fill the entire canvas
+        const undoRedo = () => {
+            if (pointer.current > 0 && toolBarState.tool === 'Undo')
+                pointer.current = pointer.current - 1
+            if (pointer.current < imageArray.current.length - 1 && toolBarState.tool === 'Redo')
+                pointer.current = pointer.current + 1
+            const imageData = imageArray.current[pointer.current]
+            context.putImageData(imageData, 0, 0)
         }
 
         if (toolBarState.tool === 'Download')
             handleDownload()
-        else if (toolBarState.tool === 'Fill')
-            fillColour()
+        else if (toolBarState.tool === 'Undo' || toolBarState.tool === 'Redo')
+            undoRedo()
         else
             configureColour()
-
-    }, [toolBarState.penColour, toolBarState.brushSize, toolBarState.backgroundColour, toolBarState.tool]);
+        console.log(toolBarState.trigger)
+    }, [toolBarState.penColour, toolBarState.brushSize, toolBarState.backgroundColour, toolBarState.tool, toolBarState.trigger]);
 
 
 
@@ -108,8 +118,13 @@ const DrawingBoard = () => {
     };
 
     const stopDrawing = () => {
+        const drawingBoard = drawingBoardRef.current;
         contextRef.current.closePath();
         setIsDrawing(false);
+        const context = drawingBoard.getContext("2d");
+        const imageData = context.getImageData(0, 0, drawingBoard.width, drawingBoard.height)
+        imageArray.current.push(imageData)
+        pointer.current = imageArray.current.length - 1
     };
 
     const draw = (e) => {
@@ -123,7 +138,8 @@ const DrawingBoard = () => {
     };
 
     return (
-        <div style={{ height: "99.5%" }}>
+        <div style={{ height: "100%" }}>
+            <ToolBar className={classes.toolBar} />
             <canvas
                 onMouseDown={startDrawing}
                 onMouseUp={stopDrawing}
@@ -132,7 +148,7 @@ const DrawingBoard = () => {
                 onTouchEnd={stopDrawing}
                 onTouchMove={draw}
                 ref={drawingBoardRef}
-                style={{ height: "100%", width: "100%", backgroundColor: backgroundColor }}
+                style={{ height: "100%", width: "100%", backgroundColor: backgroundColor, boxSizing: 'border-box' }}
             />
         </div>
     );

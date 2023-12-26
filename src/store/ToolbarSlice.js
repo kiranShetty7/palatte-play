@@ -4,7 +4,8 @@ const initialState = {
     tool: "Draw",
     backgroundColour: "#fff",
     penColour: "#000",
-    brushSize: 40
+    brushSize: 40,
+    trigger: 0
 };
 
 
@@ -15,6 +16,8 @@ const toolBarSlice = createSlice({
         updateTool(state, action) {
             console.log(action.payload)
             state.tool = action.payload.tool;
+            if (action.payload.tool === "Redo" || action.payload.tool === "Undo")
+                state.trigger = state.trigger + 1;
         },
 
         updateBackgroundColour(state, action) {

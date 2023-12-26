@@ -10,8 +10,8 @@ function App() {
     <div >
       <Provider store={store}>
         {/* <AuthLayout /> */}
-        {/* <PalattePlayground /> */}
-        <PaletteGallery />
+        <PalattePlayground />
+        {/* <PaletteGallery /> */}
       </Provider>
     </div>
   );

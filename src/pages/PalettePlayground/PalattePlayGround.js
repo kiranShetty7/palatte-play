@@ -6,10 +6,7 @@ const PalattePlayground = () => {
 
     return (
         <div className={classes.container}>
-            <ToolBar />
-            <div className={classes.drawingBoard} >
-                <DrawingBoard />
-            </div>
+            <DrawingBoard />
         </div>
     )
 }
