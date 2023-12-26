@@ -25,8 +25,8 @@ export default function ColorPicker(props) {
 
     return (
         <div className={classes.container}>
-            {colorArray.map((colour) => (
-                <div style={{ backgroundColor: colour }} className={`${classes.colour} ${color === colour && classes.selected}`} onClick={(e) => handleClick(e, colour)}> </div>
+            {colorArray.map((colour, index) => (
+                <div key={index} style={{ backgroundColor: colour }} className={`${classes.colour} ${color === colour && classes.selected}`} onClick={(e) => handleClick(e, colour)}> </div>
             ))}
 
         </div>

@@ -5,14 +5,12 @@ import store from './store/index';
 import AuthLayout from './pages/AuthLayout/AuthLayout';
 import PaletteGallery from './pages/PaletteGallery/PaletteGallery';
 import DrawingBoard from './components/DrawingBoard/DrawingBoard';
-
+import RouterConfig from './router/RouterConfig';
 function App() {
   return (
     <div >
       <Provider store={store}>
-        {/* <AuthLayout /> */}
-        <DrawingBoard />
-        {/* <PaletteGallery /> */}
+        <RouterConfig />
       </Provider>
     </div>
   );

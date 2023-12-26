@@ -51,25 +51,13 @@ const ToolBar = (props) => {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                {/* <MenuItem onClick={handleClose} className={classes.menu} > */}
                 {toolBarArray.map((item, number) => (
-                    <>
-                        <div
-                            className={`${classes.icon} ${index === number && classes.background
-                                }`}
-                            onClick={(e) => handleClick(e, item, number)}
-                        >
-                            <IconSelector name={item} />
-                            <p className={classes.name}>{item}</p>
-                        </div>
-                        {/* {item === 'Brush Size' && } */}
-                    </>
+                    <MenuItem key={number} onClick={(e) => handleClick(e, item, number)} className={`${classes.icon} ${index === number && classes.background}`}>
+                        <IconSelector name={item} handleClose={handleClose} />
+                        <p className={classes.name}>{item}</p>
+                    </MenuItem>
                 ))}
-                {/* </MenuItem>x
-                 */}
-
             </Menu>
-
         </div>
     );
 };

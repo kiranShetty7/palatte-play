@@ -27,6 +27,7 @@ const IconSelector = (props) => {
     };
     const handleClose = () => {
         setAnchorEl(null);
+        props.handleClose()
     };
     const handleChange = (event, newValue) => {
         setSize(newValue);
