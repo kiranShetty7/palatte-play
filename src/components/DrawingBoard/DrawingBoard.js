@@ -138,7 +138,7 @@ const DrawingBoard = () => {
     };
 
     return (
-        <div style={{ height: "100%" }}>
+        <div style={{ height: "100vh", boxSizing: 'border-box' }}>
             <ToolBar className={classes.toolBar} />
             <canvas
                 onMouseDown={startDrawing}
@@ -148,7 +148,7 @@ const DrawingBoard = () => {
                 onTouchEnd={stopDrawing}
                 onTouchMove={draw}
                 ref={drawingBoardRef}
-                style={{ height: "100%", width: "100%", backgroundColor: backgroundColor, boxSizing: 'border-box' }}
+                style={{ height: "100%", width: "100%", backgroundColor: backgroundColor }}
             />
         </div>
     );
