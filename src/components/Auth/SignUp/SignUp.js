@@ -10,11 +10,10 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import classes from './SignUp.module.css'
-// import { SignUpOperation } from '../../../services/blabberApiHandler';
-// import { updateSnackBar } from '../../../store/SnackBarSlice';
+import { SignUpOperation } from '../../../services/apiHandler';
+import { updateSnackBar } from '../../../store/SnackBarSlice';
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom'
-// import ImageUpload from '../../ImageUpload/ImageUpload';
 import { useSelector } from "react-redux";
 
 const SignUp = () => {
@@ -33,9 +32,7 @@ const SignUp = () => {
         confirmPassword: false,
     });
     const store = useSelector((state) => state)
-    const imageLoaderState = store.imageUpload
 
-    const [picLoading, setPicLoading] = React.useState(false);
 
     const handleClickShowPassword = (field) => () => {
         setShowPassword((prev) => ({
@@ -44,71 +41,65 @@ const SignUp = () => {
         }));
     };
 
-    React.useEffect(() => {
-        setPicLoading(imageLoaderState.loading)
-
-    }, [imageLoaderState.loading])
-
     const onSubmit = async (data) => {
-        // const { password, confirmPassword } = data;
+        const { password, confirmPassword } = data;
 
-        // const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/;
+        const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/;
 
-        // if (!passwordRegex.test(password)) {
-        //     setError('password', {
-        //         type: 'custom',
-        //         message: 'Password length should be at least 8 characters with 1 special character and 1 number',
-        //     });
-        //     return;
-        // }
+        if (!passwordRegex.test(password)) {
+            setError('password', {
+                type: 'custom',
+                message: 'Password length should be at least 8 characters with 1 special character and 1 number',
+            });
+            return;
+        }
 
-        // if (password !== confirmPassword) {
-        //     setError('confirmPassword', {
-        //         type: 'custom',
-        //         message: 'Passwords do not match',
-        //     });
-        //     return;
-        // } else {
-        //     clearErrors('confirmPassword');
-        // }
+        if (password !== confirmPassword) {
+            setError('confirmPassword', {
+                type: 'custom',
+                message: 'Passwords do not match',
+            });
+            return;
+        } else {
+            clearErrors('confirmPassword');
+        }
 
-        // const payload = {
-        //     name: data.name,
-        //     email: data.email,
-        //     password: data.password,
-        //     profilePic: localStorage.getItem('uploadProfileLink'),
-        // };
+        const payload = {
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            profilePic: localStorage.getItem('uploadProfileLink'),
+        };
 
-        // try {
-        //     const response = await SignUpOperation(payload)
-        //     if (response?.data?.success) {
-        //         localStorage.setItem('name', response?.data?.data?.name)
-        //         localStorage.setItem('userId', response?.data?.data?.userId)
-        //         localStorage.setItem('profilePic', response?.data?.data?.profilePic)
-        //         localStorage.setItem('token', response?.data?.data?.token)
-        //         localStorage.setItem('email', response?.data?.data?.email)
-        //         localStorage.removeItem('uploadProfileLink')
-        //         navigate('/chats')
-        //     }
-        //     else {
-        //         dispatch(
-        //             updateSnackBar({
-        //                 open: true,
-        //                 severity: 'error',
-        //                 message: 'Failed to SignUp'
-        //             })
-        //         )
-        //     }
-        // }
-        // catch (error) {
-        //     dispatch(
-        //         updateSnackBar({
-        //             open: true,
-        //             severity: 'error',
-        //             message: 'Something went wrong'
-        //         })
-        //     )
-        // }
+        try {
+            const response = await SignUpOperation(payload)
+            if (response?.data?.success) {
+                localStorage.setItem('name', response?.data?.data?.name)
+                localStorage.setItem('userId', response?.data?.data?.userId)
+                localStorage.setItem('token', response?.data?.data?.token)
+                localStorage.setItem('email', response?.data?.data?.email)
+
+                navigate('/gallery')
+            }
+            else {
+                dispatch(
+                    updateSnackBar({
+                        open: true,
+                        severity: 'error',
+                        message: 'Failed to SignUp'
+                    })
+                )
+            }
+        }
+        catch (error) {
+            dispatch(
+                updateSnackBar({
+                    open: true,
+                    severity: 'error',
+                    message: 'Something went wrong'
+                })
+            )
+        }
     };
 
     return (
@@ -117,7 +108,7 @@ const SignUp = () => {
                 <div className={classes.container}>
                     <TextField
                         id="outlined-basic"
-                        label="Whisper your true name"
+                        label="Name"
                         variant="outlined"
                         sx={{ width: '100%' }}
                         {...register('name', { required: 'Name is required' })}
@@ -126,7 +117,7 @@ const SignUp = () => {
                     />
                     <TextField
                         id="email"
-                        label="Spill the email beans!"
+                        label="Email id"
                         sx={{ width: '100%', m: 1 }}
                         className={errors.email ? 'error' : ''}
                         {...register('email', {
@@ -140,7 +131,7 @@ const SignUp = () => {
                         helperText={errors.email?.message}
                     />
                     <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">Conjure your secret code!</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput
                             id="password"
                             type={showPassword.password ? 'text' : 'password'}
@@ -164,7 +155,7 @@ const SignUp = () => {
                         <span className={classes.error}>{errors.password && errors.password.message}</span>
                     </FormControl>
                     <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-confirm-password">Validate Sorcery!</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-confirm-password">Confirm Password</InputLabel>
                         <OutlinedInput
                             id="confirmPassword"
                             type={showPassword.confirmPassword ? 'text' : 'password'}
@@ -187,14 +178,13 @@ const SignUp = () => {
                         />
                         <span className={classes.error}>{errors.confirmPassword && errors.confirmPassword.message}</span>
                     </FormControl>
-                    {/* <ImageUpload /> */}
                     <Button
                         type="submit"
                         variant="contained"
                         sx={{ width: '100%' }}
-                        disabled={Object.keys(errors).length > 0 || picLoading}
+                        disabled={Object.keys(errors).length > 0}
                     >
-                        Join the Blabber Babble!
+                        Start Drawing !
                     </Button>
                 </div>
             </form>

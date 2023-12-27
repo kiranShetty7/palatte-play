@@ -70,6 +70,7 @@ const DrawingBoard = () => {
             // Create a data URI from the temporary canvas
             const URL = tempCanvas.toDataURL();
 
+            console.log(URL)
             // Create a download link
             const anchor = document.createElement('a');
             anchor.href = URL;
@@ -125,6 +126,7 @@ const DrawingBoard = () => {
         const imageData = context.getImageData(0, 0, drawingBoard.width, drawingBoard.height)
         imageArray.current.push(imageData)
         pointer.current = imageArray.current.length - 1
+
     };
 
     const draw = (e) => {

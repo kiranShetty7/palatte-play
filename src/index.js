@@ -4,11 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
+import CustomRouter from './router/CustomRouter';
+import customHistory from './router/CustomBrowserHistory'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter><App /></BrowserRouter>
+    <CustomRouter history={customHistory}><App /></CustomRouter>
 
   </React.StrictMode>
 );

@@ -10,16 +10,16 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import classes from './Login.module.css'
-// import { loginOperation } from '../../../services/blabberApiHandler';
-// import { updateSnackBar } from '../../../store/SnackBarSlice';
+import { loginOperation } from '../../../services/apiHandler';
+import { updateSnackBar } from '../../../store/SnackBarSlice';
 import { useDispatch } from "react-redux";
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = React.useState(false);
     const dispatch = useDispatch();
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const handleMouseDownPassword = (event) => {
@@ -27,39 +27,39 @@ const Login = () => {
     };
 
     const onSubmit = async (data) => {
-        //     const payload = {
-        //         email: data.email,
-        //         password: data.password
-        //     }
-        // try {
-        // const response = await loginOperation(payload)
-        // if (response?.data?.success) {
-        //     localStorage.setItem('name', response?.data?.data?.name)
-        //     localStorage.setItem('userId', response?.data?.data?.userId)
-        //     localStorage.setItem('profilePic', response?.data?.data?.profilePic)
-        //     localStorage.setItem('token', response?.data?.data?.token)
-        //     localStorage.setItem('email', response?.data?.data?.email)
-        //     setTimeout(() => { navigate('/chats') }, 1000)
-        // }
-        // else {
-        // dispatch(
-        //     updateSnackBar({
-        //         open: true,
-        //         severity: 'error',
-        //         message: 'Failed to Login'
-        //     })
-        // )
-        //     }
-        // }
-        // catch (error) {
-        // dispatch(
-        //     updateSnackBar({
-        //         open: true,
-        //         severity: 'error',
-        //         message: 'Something went wrong'
-        //     })
-        // )
-        // }
+        const payload = {
+            email: data.email,
+            password: data.password
+        }
+        try {
+            const response = await loginOperation(payload)
+            if (response?.data?.success) {
+                localStorage.setItem('name', response?.data?.data?.name)
+                localStorage.setItem('userId', response?.data?.data?.userId)
+                localStorage.setItem('profilePic', response?.data?.data?.profilePic)
+                localStorage.setItem('token', response?.data?.data?.token)
+                localStorage.setItem('email', response?.data?.data?.email)
+                setTimeout(() => { navigate('/gallery') }, 1000)
+            }
+            else {
+                dispatch(
+                    updateSnackBar({
+                        open: true,
+                        severity: 'error',
+                        message: 'Failed to Login'
+                    })
+                )
+            }
+        }
+        catch (error) {
+            dispatch(
+                updateSnackBar({
+                    open: true,
+                    severity: 'error',
+                    message: 'Something went wrong'
+                })
+            )
+        }
     };
 
     return (

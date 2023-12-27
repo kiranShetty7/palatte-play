@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import toolbarSlice from './ToolbarSlice';
+import ToolbarSlice from './ToolbarSlice';
+import LoaderSlice from './LoaderSlice';
+import SnackBarSlice from './SnackBarSlice';
 
 const store = configureStore({
     reducer: {
-        toolbar: toolbarSlice
+        toolbar: ToolbarSlice,
+        loader: LoaderSlice,
+        snackbar: SnackBarSlice
     },
 });
 
