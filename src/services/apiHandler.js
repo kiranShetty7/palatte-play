@@ -1,4 +1,17 @@
-import { PALATTE_PLAY_BASE_URL, VERSION, USER, DRAWING, LOGIN, SIGN_UP, GET_ALL_DRAWINGS, CREATE_DRAWING, GET_INDIVIDUAL_DRAWING, SAVE_DRAWING, EDIT_NAME } from './CONSTANTS';
+import {
+    PALATTE_PLAY_BASE_URL,
+    VERSION,
+    USER,
+    DRAWING,
+    LOGIN,
+    SIGN_UP,
+    GET_ALL_DRAWINGS,
+    CREATE_DRAWING,
+    GET_INDIVIDUAL_DRAWING,
+    SAVE_DRAWING,
+    EDIT_NAME,
+    DELETE
+} from './CONSTANTS';
 import axios from 'axios'
 import history from "../router/CustomBrowserHistory";
 import store from '../store/index'
@@ -73,111 +86,108 @@ export async function SignUpOperation(payload) {
     });
 }
 
-// export async function getBlabberUsers(filter) {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const URL = PALATTE_PLAY_BASE_URL + VERSION + USER + GET_BLABBER_USERS;
-//             const CONFIG = {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 params: {
-//                     filter
-//                 }
+export async function getAllDrawings() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const URL = PALATTE_PLAY_BASE_URL + VERSION + DRAWING + GET_ALL_DRAWINGS;
+            const CONFIG = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
 
-//             };
-//             const response = await instance.get(URL, CONFIG);
-//             resolve(response);
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }
+            };
+            const response = await instance.get(URL, CONFIG);
+            resolve(response);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
-// export async function createBlabberChat(payload) {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const URL = PALATTE_PLAY_BASE_URL + VERSION + CHAT + CREATE_BLABBER_CHAT;
-//             const CONFIG = {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//             };
-//             const response = await instance.post(URL, payload, CONFIG);
-//             resolve(response);
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }
+export async function createNewDrawing(payload) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const URL = PALATTE_PLAY_BASE_URL + VERSION + DRAWING + CREATE_DRAWING;
+            const CONFIG = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const response = await instance.post(URL, payload, CONFIG);
+            resolve(response);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
-// export async function getBlabberChats() {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const URL = PALATTE_PLAY_BASE_URL + VERSION + CHAT + GET_BLABBER_CHAT_LIST;
-//             const CONFIG = {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
+export async function editName(payload) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const URL = PALATTE_PLAY_BASE_URL + VERSION + DRAWING + EDIT_NAME;
+            const CONFIG = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const response = await instance.post(URL, payload, CONFIG);
+            resolve(response);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
-//             };
-//             const response = await instance.get(URL, CONFIG);
-//             resolve(response);
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }
+export async function getIndividualDrawing(drawingId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const URL = PALATTE_PLAY_BASE_URL + VERSION + DRAWING + GET_INDIVIDUAL_DRAWING + '/' + drawingId;;
+            const CONFIG = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const response = await instance.get(URL, CONFIG);
+            resolve(response);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
-// export async function sendMessage(payload) {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const URL = PALATTE_PLAY_BASE_URL + VERSION + CHAT + SEND_MESSAGE;
-//             const CONFIG = {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//             };
-//             const response = await instance.post(URL, payload, CONFIG);
-//             resolve(response);
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }
+export async function saveDrawing(payload) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const URL = PALATTE_PLAY_BASE_URL + VERSION + DRAWING + SAVE_DRAWING;
+            const CONFIG = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const response = await instance.post(URL, payload, CONFIG);
+            resolve(response);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
-// export async function getIndividualChat(chatId) {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const URL = PALATTE_PLAY_BASE_URL + VERSION + CHAT + GET_INDIVIDUAL_CHAT_DETAILS + '/' + chatId;
-//             const CONFIG = {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
+export async function deleteDrawing(drawingId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const URL = PALATTE_PLAY_BASE_URL + VERSION + DRAWING + DELETE + '/' + drawingId;;
+            const CONFIG = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
 
-//             };
-//             const response = await instance.get(URL, CONFIG);
-//             resolve(response);
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }
 
-// export async function readMessageApiCall(chatId) {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const URL = PALATTE_PLAY_BASE_URL + VERSION + CHAT + READ_MESSAGE + '/' + chatId;
-//             const CONFIG = {
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
+            };
+            const response = await instance.get(URL, CONFIG);
+            resolve(response);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
-//             };
-//             const response = await instance.get(URL, CONFIG);
-//             resolve(response);
-//         } catch (error) {
-//             reject(error);
-//         }
-//     });
-// }

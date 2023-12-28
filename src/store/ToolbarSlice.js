@@ -16,7 +16,7 @@ const toolBarSlice = createSlice({
         updateTool(state, action) {
             console.log(action.payload)
             state.tool = action.payload.tool;
-            if (action.payload.tool === "Redo" || action.payload.tool === "Undo")
+            if (action.payload.tool === "Redo" || action.payload.tool === "Undo" || action.payload.tool === "Save")
                 state.trigger = state.trigger + 1;
         },
 
@@ -35,10 +35,6 @@ const toolBarSlice = createSlice({
             state.brushSize = action.payload.brushSize;
         },
 
-        updateBrushSize(state, action) {
-            console.log(action.payload)
-            state.brushSize = action.payload.brushSize;
-        },
     },
 
 });

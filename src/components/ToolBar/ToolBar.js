@@ -16,7 +16,8 @@ const ToolBar = (props) => {
         "Redo",
         "Background colour",
         "Change colour",
-        "Download"
+        "Download",
+        "Save"
     ];
 
     const [index, setIndex] = useState(null);

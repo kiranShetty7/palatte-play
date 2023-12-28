@@ -11,10 +11,10 @@ import classes from './IconSelector.module.css'
 import Slider from '@mui/material/Slider';
 import ColorPickerComponent from "../ColorPicker/ColorPicker";
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem'
 import { useDispatch } from 'react-redux';
 import { updateBrushSize } from "../../store/ToolbarSlice";
 import DownloadIcon from '@mui/icons-material/Download';
+import SaveIcon from '@mui/icons-material/Save';
 
 const IconSelector = (props) => {
     const [size, setSize] = useState(30);
@@ -91,6 +91,9 @@ const IconSelector = (props) => {
 
     if (name === 'Download')
         return (<DownloadIcon className={classes.icon} />)
+
+    if (name === 'Save')
+        return (<SaveIcon className={classes.icon} />)
 
 }
 
