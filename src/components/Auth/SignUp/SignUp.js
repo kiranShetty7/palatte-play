@@ -15,6 +15,7 @@ import { updateSnackBar } from '../../../store/SnackBarSlice';
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
+import { updateAppLoader } from '../../../store/LoaderSlice';
 
 const SignUp = () => {
     const {
@@ -42,6 +43,11 @@ const SignUp = () => {
     };
 
     const onSubmit = async (data) => {
+        dispatch(
+            updateAppLoader({
+                loading: true
+            })
+        )
         const { password, confirmPassword } = data;
 
         const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/;
@@ -51,6 +57,11 @@ const SignUp = () => {
                 type: 'custom',
                 message: 'Password length should be at least 8 characters with 1 special character and 1 number',
             });
+            dispatch(
+                updateAppLoader({
+                    loading: false
+                })
+            )
             return;
         }
 
@@ -59,6 +70,11 @@ const SignUp = () => {
                 type: 'custom',
                 message: 'Passwords do not match',
             });
+            dispatch(
+                updateAppLoader({
+                    loading: false
+                })
+            )
             return;
         } else {
             clearErrors('confirmPassword');
@@ -68,7 +84,6 @@ const SignUp = () => {
             name: data.name,
             email: data.email,
             password: data.password,
-            profilePic: localStorage.getItem('uploadProfileLink'),
         };
 
         try {
@@ -100,6 +115,11 @@ const SignUp = () => {
                 })
             )
         }
+        dispatch(
+            updateAppLoader({
+                loading: false
+            })
+        )
     };
 
     return (

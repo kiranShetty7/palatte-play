@@ -1,42 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import ToolBar from "../ToolBar/ToolBar";
-import classes from './DrawingBoard.module.css'
-import { useLocation } from "react-router-dom";
-import { getIndividualDrawing, saveDrawing } from "../../services/apiHandler";
+import classes from './DrawingBoard.module.css';
+import { saveDrawing } from "../../services/apiHandler";
 import { updateSnackBar } from "../../store/SnackBarSlice";
-import { updateAppLoader } from "../../store/LoaderSlice";
 import SaveModal from "../SaveModal/SaveModal";
+import { updateAppLoader } from "../../store/LoaderSlice";
 
 const DrawingBoard = () => {
     const drawingBoardRef = useRef(null);
     const contextRef = useRef(null);
-    const [isDrawing, setIsDrawing] = useState(false);
-    const [backgroundColor, setBackgroundColor] = useState('#fff')
+    const isDrawingRef = useRef(false);
+    const imageArray = useRef([]);
+    const pointer = useRef(0);
+    const dispatch = useDispatch();
+    const [open, setOpen] = useState(false);
+    const [backgroundColor, setBackgroundColor] = useState('#fff');
     const store = useSelector((state) => state)
     const toolBarState = store.toolbar
-    const imageArray = useRef([])
-    const pointer = useRef(0)
-    const dispatch = useDispatch()
-    const location = useLocation()
-    const searchParams = new URLSearchParams(location?.search);
-    const drawingId = searchParams.get('id');
-    const [open, setOpen] = useState(false)
-    console.log(drawingId)
-
     useEffect(() => {
         const drawingBoard = drawingBoardRef.current;
         const parentDiv = drawingBoard.parentElement;
         const context = drawingBoard.getContext("2d");
-        const imageData = context.getImageData(0, 0, drawingBoard.width, drawingBoard.height)
-        imageArray.current.push(imageData)
-
+        const imageData = context.getImageData(0, 0, drawingBoard.width, drawingBoard.height);
+        imageArray.current.push(imageData);
 
         const resizeCanvas = () => {
             const { clientWidth, clientHeight } = parentDiv;
             drawingBoard.width = clientWidth;
             drawingBoard.height = clientHeight;
-
 
             context.lineCap = "round";
             context.strokeStyle = "black";
@@ -54,60 +46,60 @@ const DrawingBoard = () => {
 
     useEffect(() => {
         const drawingBoard = drawingBoardRef.current;
-        console.log("cakjcka")
         const context = drawingBoard.getContext("2d");
-        const configureColour = () => {
 
+        const configureColour = () => {
             context.lineCap = "round";
             context.strokeStyle = toolBarState.tool === 'Eraser' ? backgroundColor : toolBarState.penColour;
             context.lineWidth = toolBarState.brushSize / 10;
             contextRef.current = context;
-            setBackgroundColor(toolBarState.backgroundColour)
+            setBackgroundColor(toolBarState.backgroundColour);
         };
 
         const handleDownload = () => {
             const tempCanvas = document.createElement('canvas');
             const tempContext = tempCanvas.getContext('2d');
 
-
             tempCanvas.width = drawingBoard.width;
             tempCanvas.height = drawingBoard.height;
 
             tempContext.drawImage(drawingBoard, 0, 0);
 
-
             const URL = tempCanvas.toDataURL();
-
-            console.log(URL)
 
             const anchor = document.createElement('a');
             anchor.href = URL;
-            anchor.download = 'test.jpg';
+            anchor.download = 'Palette-play-Image.jpg';
             anchor.click();
         };
 
         const undoRedo = () => {
             if (pointer.current > 0 && toolBarState.tool === 'Undo')
-                pointer.current = pointer.current - 1
+                pointer.current = pointer.current - 1;
             if (pointer.current < imageArray.current.length - 1 && toolBarState.tool === 'Redo')
-                pointer.current = pointer.current + 1
-            const imageData = imageArray.current[pointer.current]
-            context.putImageData(imageData, 0, 0)
+                pointer.current = pointer.current + 1;
+            const imageData = imageArray.current[pointer.current];
+            context.putImageData(imageData, 0, 0);
+        };
+
+        if (toolBarState.tool === 'Download') {
+            handleDownload();
+        } else if (toolBarState.tool === 'Undo' || toolBarState.tool === 'Redo') {
+            undoRedo();
+        } else if (toolBarState.tool === 'Save') {
+            setOpen(true);
+        } else {
+            configureColour();
         }
-
-
-        if (toolBarState.tool === 'Download')
-            handleDownload()
-        else if (toolBarState.tool === 'Undo' || toolBarState.tool === 'Redo')
-            undoRedo()
-        else if (toolBarState.tool === 'Save')
-            setOpen(true)
-        else
-            configureColour()
-        console.log(toolBarState.tool)
     }, [toolBarState.penColour, toolBarState.brushSize, toolBarState.backgroundColour, toolBarState.tool, toolBarState.trigger]);
 
     const handleSave = async (name) => {
+        dispatch(
+            updateAppLoader({
+                loading: true
+            })
+        )
+        handleClose();
         const drawingBoard = drawingBoardRef.current;
         const tempCanvas = document.createElement('canvas');
         const tempContext = tempCanvas.getContext('2d');
@@ -122,12 +114,10 @@ const DrawingBoard = () => {
         const dataUrl = tempCanvas.toDataURL();
 
         try {
-
             const response = await fetch(dataUrl);
             const blob = await response.blob();
 
             const formData = new FormData();
-
             formData.append('upload_preset', 'palette-play');
             formData.append('cloud_name', 'dj0qzdrqv');
             formData.append('file', blob);
@@ -139,42 +129,41 @@ const DrawingBoard = () => {
 
             const cloudinaryData = await cloudinaryResponse.json();
             if (cloudinaryData.secure_url) {
-                console.log("efbkvefvn")
                 const payload = {
                     userId: localStorage.getItem('userId'),
                     url: cloudinaryData.secure_url,
-                    name: name
-                }
+                    name: name,
+                };
 
-                const response = await saveDrawing(payload)
+                const response = await saveDrawing(payload);
                 if (response?.data?.success) {
-                    handleClose()
+
                     dispatch(
                         updateSnackBar({
                             open: true,
                             severity: 'success',
-                            message: 'Image saved successfully !'
+                            message: 'Image saved successfully !',
                         })
-                    )
-                }
-                else {
+                    );
+                } else {
                     dispatch(
                         updateSnackBar({
                             open: true,
                             severity: 'error',
-                            message: 'Failed to get drawing'
+                            message: 'Failed to get drawing',
                         })
-                    )
+                    );
                 }
-
             }
-            console.log(cloudinaryData)
-
         } catch (error) {
             console.error('Error saving image to Cloudinary:', error);
         }
+        dispatch(
+            updateAppLoader({
+                loading: false
+            })
+        )
     };
-
 
     const scaleCoordinates = (e) => {
         const { pageX, pageY } = e.touches ? e.touches[0] : e;
@@ -187,32 +176,29 @@ const DrawingBoard = () => {
         };
     };
 
-
     const startDrawing = (e) => {
         const { x, y } = scaleCoordinates(e);
-
         contextRef.current.beginPath();
         contextRef.current.moveTo(x, y);
-        setIsDrawing(true);
+        isDrawingRef.current = true;
     };
 
-
     const handleClose = () => {
-        setOpen(false)
-    }
+        setOpen(false);
+    };
 
     const stopDrawing = () => {
         const drawingBoard = drawingBoardRef.current;
         contextRef.current.closePath();
-        setIsDrawing(false);
+        isDrawingRef.current = false;
         const context = drawingBoard.getContext("2d");
-        const imageData = context.getImageData(0, 0, drawingBoard.width, drawingBoard.height)
-        imageArray.current.push(imageData)
-        pointer.current = imageArray.current.length - 1
+        const imageData = context.getImageData(0, 0, drawingBoard.width, drawingBoard.height);
+        imageArray.current.push(imageData);
+        pointer.current = imageArray.current.length - 1;
     };
 
     const draw = (e) => {
-        if (!isDrawing) {
+        if (!isDrawingRef.current) {
             return;
         }
 

@@ -14,6 +14,7 @@ import { loginOperation } from '../../../services/apiHandler';
 import { updateSnackBar } from '../../../store/SnackBarSlice';
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom'
+import { updateAppLoader } from '../../../store/LoaderSlice';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -27,6 +28,11 @@ const Login = () => {
     };
 
     const onSubmit = async (data) => {
+        dispatch(
+            updateAppLoader({
+                loading: true
+            })
+        )
         const payload = {
             email: data.email,
             password: data.password
@@ -60,6 +66,11 @@ const Login = () => {
                 })
             )
         }
+        dispatch(
+            updateAppLoader({
+                loading: false
+            })
+        )
     };
 
     return (

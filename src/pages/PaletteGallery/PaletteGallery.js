@@ -28,6 +28,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageModal from '../../components/ImageModal/ImageModal';
 import GlobalNavbar from '../../components/GlobalNavbar/GlobalNavbar';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import { useLocation } from 'react-router-dom'
 
 const PaletteGallery = () => {
 
@@ -36,7 +38,8 @@ const PaletteGallery = () => {
     const [selectedDrawing, setSelectedDrawing] = React.useState({})
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    const location = useLocation();
+    console.log(location)
     React.useEffect(() => {
         fetchData()
     }, [])
@@ -80,6 +83,11 @@ const PaletteGallery = () => {
     }
 
     const editDrawingName = async (drawing) => {
+        dispatch(
+            updateAppLoader({
+                loading: true
+            })
+        )
         try {
             const payload = {
                 "name": drawing.name,
@@ -115,10 +123,16 @@ const PaletteGallery = () => {
                 })
             )
         }
+        dispatch(
+            updateAppLoader({
+                loading: false
+            })
+        )
     }
 
     const handleCopyLink = (id) => {
-        navigator.clipboard.writeText(`http://localhost:3000/drawingBoard?id=${id}`)
+        const baseURL = `${window.location.protocol}//${window.location.host}`;
+        navigator.clipboard.writeText(`${baseURL}/drawingBoard?id=${id}`)
         setDrawingList(prev => prev?.map((drawing) => {
             if (drawing?._id === id)
                 return {
@@ -253,12 +267,17 @@ const PaletteGallery = () => {
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div" align='center' >
                                     {!drawing?.edit ?
-                                        <div className={classes.edit} >
-                                            <span className={classes.name} onClick={() => handleDrawingOpen(drawing)}> {`${drawing.name}`}</span>
-                                            <EditIcon onClick={() => {
-                                                handleEdit(drawing._id, true)
-                                            }} />
-                                        </div> :
+                                        <>
+                                            <div className={classes.edit} >
+                                                <span > {`${drawing.name}`}</span>
+                                                <EditIcon onClick={() => {
+                                                    handleEdit(drawing._id, true)
+                                                }} />
+                                                <OpenInFullIcon onClick={() => handleDrawingOpen(drawing)} />
+                                            </div>
+
+                                            {/* <span className={classes.name} > View Image</span> */}
+                                        </> :
                                         <div className={classes.editContainer}>
                                             <FormControl className={classes.textField} variant="standard">
                                                 <Input

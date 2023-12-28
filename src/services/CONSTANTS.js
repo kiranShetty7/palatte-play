@@ -1,4 +1,4 @@
-export const PALATTE_PLAY_BASE_URL = 'http://localhost:4000'
+export const PALATTE_PLAY_BASE_URL = 'https://palette-play-backend.onrender.com'
 export const VERSION = '/v1/'
 export const USER = 'user/'
 export const DRAWING = 'drawing/'

@@ -4,20 +4,7 @@ import classes from './ImageModal.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '40%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-};
+
 
 
 const ImageModal = (props) => {
@@ -42,7 +29,7 @@ const ImageModal = (props) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
+                <Box className={classes.container}>
                     <div style={{ height: '100%', width: '100%' }}>
                         <div className={classes.header} >
                             <h3 >{drawing.name}</h3>

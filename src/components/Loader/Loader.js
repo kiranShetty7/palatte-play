@@ -18,7 +18,7 @@ const Loader = () => {
 
     return (<>
         <Backdrop
-            sx={{ color: '#ffbc47', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{ color: 'white', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={open}
             onClick={handleClose}
         >

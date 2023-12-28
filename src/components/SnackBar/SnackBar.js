@@ -4,11 +4,11 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { updateSnackBar } from '../../store/SnackBarSlice';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 
@@ -16,8 +16,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const SnackBar = () => {
     const [open, setOpen] = React.useState(false);
     const store = useSelector((state) => state)
+    console.log(store)
     const dispatch = useDispatch()
-    const snackBarState = store.snackBar
+    const snackBarState = store.snackbar
 
     React.useEffect(() => {
 
@@ -36,9 +37,9 @@ const SnackBar = () => {
     const handleClose = () => {
         dispatch(
             updateSnackBar({
-                 open: false,
-                    severity: '',
-                    message: ''
+                open: false,
+                severity: '',
+                message: ''
             })
         )
     };
